@@ -12,7 +12,8 @@
   --text:#e5e5e5;--muted:#666;--accent:#7c3aed;--accent-light:#a78bfa;
   --green:#22c55e;--red:#ef4444;--yellow:#f59e0b;--blue:#3b82f6;
 }
-body{background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,sans-serif;display:flex;height:100vh;overflow:hidden;}
+html,body{width:100%;height:100%;margin:0}
+body{background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,sans-serif;display:flex;height:100vh;min-height:100vh;overflow:hidden;}
 
 /* Sidebar */
 .sidebar{width:220px;min-width:220px;background:var(--sidebar);border-right:1px solid var(--border);display:flex;flex-direction:column;padding:0;}
@@ -34,10 +35,10 @@ body{background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,san
 .avatar{width:30px;height:30px;border-radius:50%;background:var(--accent);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#fff;}
 .user-info{flex:1;min-width:0;}
 .user-name{font-size:12px;font-weight:600;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.user-role{font-size:10px;color:var(--muted);}
+.user-role{font-size:10px;color:var(--muted)}.logout-btn{border:1px solid #2b2734;background:transparent;color:#aaa;border-radius:7px;padding:6px 8px;font:inherit;font-size:11px;cursor:pointer;transition:.2s}.logout-btn:hover{color:#fff;border-color:#6d28d9;background:#7c3aed18}
 
 /* Main */
-.main{flex:1;display:flex;flex-direction:column;overflow:hidden;}
+.main{flex:1 1 auto;width:calc(100vw - 220px);min-width:0;display:flex;flex-direction:column;overflow:hidden}.topbar,.content{width:100%;min-width:0}
 .topbar{background:var(--sidebar);border-bottom:1px solid var(--border);padding:0 24px;height:54px;display:flex;align-items:center;gap:16px;}
 .topbar-title{font-size:15px;font-weight:600;flex:1;}
 .topbar-tabs{display:flex;gap:2px;}
@@ -176,7 +177,7 @@ select.form-input option{background:#1a1a1a;}
   .main,.content,.card,.upload-area,.builder-grid,.builder-form,.builder-section{min-width:0;max-width:100%}
   .builder-form .form-row{grid-template-columns:1fr!important}
   .connection-note{font-size:10px;max-width:42%;overflow-wrap:anywhere}.file-meta{white-space:normal}
-  .builder-section-title span{max-width:55%;text-align:right}
+  .builder-section-title span{max-width:55%;text-align:right}.main{width:calc(100vw - 64px)}.logout-btn{font-size:0;padding:6px}.logout-btn:before{content:'↪';font-size:15px}.topbar{overflow:hidden}.topbar .topbar-btn{font-size:0;width:40px;justify-content:center;padding:7px 8px}.topbar .topbar-btn:before{content:'+';font-size:18px}.topbar .topbar-btn-ghost{font-size:0;width:42px;justify-content:center;padding:7px 6px}.topbar .topbar-btn-ghost[onclick*="configureN8n"]:before{content:'⚙';font-size:14px}.topbar .topbar-btn-ghost[onclick*="refreshStats"]:before{content:'↻';font-size:16px}
 }
 </style>
 </head>
@@ -230,7 +231,7 @@ select.form-input option{background:#1a1a1a;}
         <div class="user-name" id="userName">Loading…</div>
         <div class="user-role" id="userRole">Authenticated</div>
       </div>
-      <a href="#" id="signOut" style="color:var(--muted);font-size:11px;text-decoration:none;" title="Sign out">⏏</a>
+      <button type="button" class="logout-btn" id="signOut" title="Sign out">↪ Sign out</button>
     </div>
   </div>
 </nav>
