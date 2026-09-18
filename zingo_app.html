@@ -1,0 +1,739 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Zingo — Campaign Studio</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+:root{
+  --bg:#0a0a0a;--sidebar:#101010;--card:#141414;--border:#1e1e1e;
+  --text:#e5e5e5;--muted:#666;--accent:#7c3aed;--accent-light:#a78bfa;
+  --green:#22c55e;--red:#ef4444;--yellow:#f59e0b;--blue:#3b82f6;
+}
+body{background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,sans-serif;display:flex;height:100vh;overflow:hidden;}
+
+/* Sidebar */
+.sidebar{width:220px;min-width:220px;background:var(--sidebar);border-right:1px solid var(--border);display:flex;flex-direction:column;padding:0;}
+.sidebar-logo{display:flex;align-items:center;gap:10px;padding:18px 16px;border-bottom:1px solid var(--border);}
+.logo-icon{width:36px;height:36px;background:var(--accent);border-radius:50%;display:flex;align-items:center;justify-content:center;}
+.logo-icon svg{width:18px;height:18px;fill:white;}
+.logo-name{font-size:17px;font-weight:700;letter-spacing:-.3px;}
+.sidebar-section{padding:8px 0;}
+.sidebar-label{font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);padding:8px 16px 4px;}
+.nav-item{display:flex;align-items:center;gap:10px;padding:9px 16px;cursor:pointer;border-radius:0;color:#888;font-size:13px;font-weight:500;transition:all .15s;border-left:2px solid transparent;}
+.nav-item:hover{background:#fff08;color:var(--text);}
+.nav-item.active{background:#7c3aed15;color:var(--accent-light);border-left-color:var(--accent);}
+.nav-item .icon{width:16px;height:16px;opacity:.7;flex-shrink:0;}
+.nav-item.active .icon{opacity:1;}
+.badge-count{margin-left:auto;background:#7c3aed33;color:var(--accent-light);font-size:10px;padding:1px 6px;border-radius:10px;}
+.sidebar-bottom{margin-top:auto;border-top:1px solid var(--border);padding:12px;}
+.user-row{display:flex;align-items:center;gap:10px;padding:6px 4px;border-radius:8px;cursor:pointer;}
+.user-row:hover{background:#ffffff0a;}
+.avatar{width:30px;height:30px;border-radius:50%;background:var(--accent);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#fff;}
+.user-info{flex:1;min-width:0;}
+.user-name{font-size:12px;font-weight:600;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.user-role{font-size:10px;color:var(--muted);}
+
+/* Main */
+.main{flex:1;display:flex;flex-direction:column;overflow:hidden;}
+.topbar{background:var(--sidebar);border-bottom:1px solid var(--border);padding:0 24px;height:54px;display:flex;align-items:center;gap:16px;}
+.topbar-title{font-size:15px;font-weight:600;flex:1;}
+.topbar-tabs{display:flex;gap:2px;}
+.tab{padding:6px 14px;border-radius:6px;font-size:13px;cursor:pointer;color:var(--muted);}
+.tab.active{background:#7c3aed20;color:var(--accent-light);}
+.tab:hover:not(.active){background:#ffffff08;color:var(--text);}
+.topbar-btn{background:var(--accent);color:#fff;border:none;border-radius:7px;padding:7px 16px;font-size:13px;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:6px;transition:background .2s;}
+.topbar-btn:hover{background:#6d28d9;}
+.topbar-btn-ghost{background:transparent;color:var(--text);border:1px solid var(--border);border-radius:7px;padding:7px 14px;font-size:13px;cursor:pointer;transition:all .2s;}
+.topbar-btn-ghost:hover{border-color:#444;background:#ffffff08;}
+
+/* Content */
+.content{flex:1;overflow-y:auto;padding:24px;}
+.content::-webkit-scrollbar{width:5px;}
+.content::-webkit-scrollbar-thumb{background:#2a2a2a;border-radius:3px;}
+
+/* Stats row */
+.stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:24px;}
+.stat-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px 18px;}
+.stat-label{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px;}
+.stat-val{font-size:26px;font-weight:700;line-height:1;}
+.stat-change{font-size:11px;margin-top:5px;}
+.stat-change.up{color:var(--green);}
+.stat-change.down{color:var(--red);}
+.stat-accent{color:var(--accent-light);}
+.stat-green{color:var(--green);}
+.stat-yellow{color:var(--yellow);}
+.stat-red{color:var(--red);}
+
+/* Two-col */
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:24px;}
+.full-col{margin-bottom:24px;}
+
+/* Card */
+.card{background:var(--card);border:1px solid var(--border);border-radius:12px;overflow:hidden;}
+.card-header{padding:14px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px;}
+.card-title{font-size:13px;font-weight:600;flex:1;}
+.card-action{font-size:12px;color:var(--accent-light);cursor:pointer;}
+.card-action:hover{text-decoration:underline;}
+
+/* Table */
+.table{width:100%;border-collapse:collapse;}
+.table th{font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);padding:10px 16px;text-align:left;font-weight:500;border-bottom:1px solid var(--border);}
+.table td{padding:11px 16px;font-size:13px;border-bottom:1px solid #ffffff08;}
+.table tr:last-child td{border-bottom:none;}
+.table tr:hover td{background:#ffffff04;}
+.pill{display:inline-flex;align-items:center;gap:4px;padding:3px 8px;border-radius:20px;font-size:11px;font-weight:600;}
+.pill.sent{background:#22c55e18;color:var(--green);}
+.pill.queued{background:#f59e0b18;color:var(--yellow);}
+.pill.failed{background:#ef444418;color:var(--red);}
+.pill.processing{background:#3b82f618;color:var(--blue);}
+.pill.suppressed{background:#66666618;color:#888;}
+.dot{width:6px;height:6px;border-radius:50%;background:currentColor;}
+
+/* Upload form */
+.upload-area{padding:20px 18px;}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px;}
+.form-group{display:flex;flex-direction:column;gap:5px;}
+.form-label{font-size:12px;color:var(--muted);}
+.form-input{background:#1a1a1a;border:1px solid #2a2a2a;border-radius:7px;padding:9px 12px;color:var(--text);font-size:13px;outline:none;transition:border .2s;}
+.form-input:focus{border-color:var(--accent);}
+select.form-input option{background:#1a1a1a;}
+.form-input-file{display:none;}
+.file-drop{border:2px dashed #2a2a2a;border-radius:8px;padding:24px;text-align:center;cursor:pointer;transition:border .2s;}
+.file-drop:hover{border-color:var(--accent);}
+.file-drop p{color:var(--muted);font-size:13px;margin-top:6px;}
+.file-drop .file-icon{font-size:28px;}
+.submit-row{display:flex;justify-content:flex-end;gap:10px;margin-top:16px;}
+
+/* Progress bar */
+.progress-wrap{background:#1a1a1a;border-radius:999px;height:6px;overflow:hidden;margin-top:6px;}
+.progress-bar{height:100%;border-radius:999px;background:linear-gradient(90deg,var(--accent),#a78bfa);transition:width .5s;}
+
+/* Metrics mini */
+.metrics-list{padding:0 18px;}
+.metric-row{display:flex;align-items:center;gap:10px;padding:12px 0;border-bottom:1px solid #ffffff06;}
+.metric-row:last-child{border-bottom:none;}
+.metric-name{flex:1;font-size:13px;}
+.metric-bar-wrap{width:120px;}
+.metric-val{font-size:13px;font-weight:600;min-width:40px;text-align:right;}
+
+/* Activity feed */
+.activity-list{padding:0 18px;}
+.activity-item{display:flex;gap:12px;padding:11px 0;border-bottom:1px solid #ffffff06;}
+.activity-item:last-child{border-bottom:none;}
+.activity-dot{width:8px;height:8px;border-radius:50%;margin-top:4px;flex-shrink:0;}
+.activity-body{flex:1;min-width:0;}
+.activity-text{font-size:13px;line-height:1.4;}
+.activity-text b{color:var(--text);}
+.activity-time{font-size:11px;color:var(--muted);margin-top:2px;}
+
+/* Notification dot */
+.notif-dot{width:7px;height:7px;background:var(--red);border-radius:50%;flex-shrink:0;}
+
+/* Tabs panel */
+.panel{display:none;}
+.panel.active{display:block;}
+
+/* Status indicator */
+.status-indicator{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--green);}
+.status-indicator::before{content:'';width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 6px var(--green);}
+
+/* Toast */
+.toast{position:fixed;bottom:24px;right:24px;background:#1a1a1a;border:1px solid var(--border);border-radius:10px;padding:14px 18px;font-size:13px;color:var(--text);display:flex;align-items:center;gap:10px;box-shadow:0 8px 32px #0006;z-index:999;transform:translateY(80px);opacity:0;transition:all .3s;}
+.toast.show{transform:translateY(0);opacity:1;}
+.toast-icon{width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;flex-shrink:0;}
+.toast-icon.success{background:#22c55e22;color:var(--green);}
+.toast-icon.error{background:#ef444422;color:var(--red);}
+
+/* Responsive */
+@media(max-width:900px){
+  .stats-row{grid-template-columns:1fr 1fr;}
+  .two-col{grid-template-columns:1fr;}
+  .form-row{grid-template-columns:1fr;}
+}
+</style>
+</head>
+<body>
+
+<!-- Sidebar -->
+<nav class="sidebar">
+  <div class="sidebar-logo">
+    <div class="logo-icon">
+      <svg viewBox="0 0 24 24"><path d="M20 2H4a2 2 0 00-2 2v18l4-4h14a2 2 0 002-2V4a2 2 0 00-2-2z"/></svg>
+    </div>
+    <span class="logo-name">zingo</span>
+  </div>
+
+  <div class="sidebar-section">
+    <div class="sidebar-label">Main</div>
+    <div class="nav-item active" onclick="showPanel('dashboard',this)">
+      <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+      Dashboard
+    </div>
+    <div class="nav-item" onclick="showPanel('campaigns',this)">
+      <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 2L11 13M22 2L15 22l-4-9-9-4 19-7z"/></svg>
+      Campaigns
+      <span class="badge-count" id="queueCount">0</span>
+    </div>
+    <div class="nav-item" onclick="showPanel('upload',this)">
+      <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M17 8l-5-5-5 5M12 3v12"/></svg>
+      Upload Campaign
+    </div>
+    <div class="nav-item" onclick="showPanel('recipients',this)">
+      <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2M9 11a4 4 0 100-8 4 4 0 000 8zM23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>
+      Recipients
+    </div>
+    <div class="nav-item" onclick="showPanel('suppression',this)">
+      <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M4.93 4.93l14.14 14.14"/></svg>
+      Suppression List
+    </div>
+    <div class="nav-item" onclick="showPanel('logs',this)">
+      <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+      Message Logs
+    </div>
+  </div>
+
+  <div class="sidebar-section" style="margin-top:auto;"></div>
+
+  <div class="sidebar-bottom">
+    <div class="status-indicator" style="margin-bottom:10px;padding:0 4px;">n8n Webhook Active</div>
+    <div class="user-row">
+      <div class="avatar" id="userAvatar">ZI</div>
+      <div class="user-info">
+        <div class="user-name" id="userName">Loading…</div>
+        <div class="user-role" id="userRole">Authenticated</div>
+      </div>
+      <a href="#" id="signOut" style="color:var(--muted);font-size:11px;text-decoration:none;" title="Sign out">⏏</a>
+    </div>
+  </div>
+</nav>
+
+<!-- Main -->
+<div class="main">
+  <div class="topbar">
+    <span class="topbar-title" id="topbarTitle">Dashboard</span>
+    <div style="flex:1;"></div>
+    <div class="status-indicator" style="margin-right:12px;font-size:11px;">Live</div>
+    <button class="topbar-btn-ghost" onclick="refreshStats()">↻ Refresh</button>
+    <button class="topbar-btn" onclick="showPanel('upload',document.querySelector('.nav-item:nth-child(3)'))">+ New Campaign</button>
+  </div>
+
+  <div class="content">
+
+    <!-- DASHBOARD PANEL -->
+    <div class="panel active" id="panel-dashboard">
+      <div class="stats-row">
+        <div class="stat-card">
+          <div class="stat-label">Total Sent</div>
+          <div class="stat-val stat-green" id="st-sent">0</div>
+          <div class="stat-change up">↑ today</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Queued</div>
+          <div class="stat-val stat-yellow" id="st-queued">0</div>
+          <div class="stat-change">pending dispatch</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Failed / Suppressed</div>
+          <div class="stat-val stat-red" id="st-failed">0</div>
+          <div class="stat-change down">needs review</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Delivery Rate</div>
+          <div class="stat-val stat-accent" id="st-rate">—</div>
+          <div class="stat-change up">↑ this week</div>
+        </div>
+      </div>
+
+      <div class="two-col">
+        <!-- Recent campaigns -->
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">Recent Campaigns</span>
+            <span class="card-action" onclick="showPanel('campaigns',document.querySelectorAll('.nav-item')[1])">View all →</span>
+          </div>
+          <table class="table">
+            <thead><tr>
+              <th>Campaign</th><th>Sent</th><th>Status</th>
+            </tr></thead>
+            <tbody id="recentCampaignsTbody">
+              <tr><td colspan="3" style="color:var(--muted);text-align:center;padding:24px;">No campaigns yet. Upload one →</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Activity feed -->
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">Activity Feed</span>
+          </div>
+          <div class="activity-list" id="activityFeed">
+            <div class="activity-item">
+              <div class="activity-dot" style="background:var(--muted)"></div>
+              <div class="activity-body">
+                <div class="activity-text" style="color:var(--muted)">No activity yet. Launch your first campaign.</div>
+                <div class="activity-time">just now</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Delivery breakdown -->
+      <div class="card full-col">
+        <div class="card-header">
+          <span class="card-title">Delivery Breakdown</span>
+        </div>
+        <div class="metrics-list">
+          <div class="metric-row">
+            <div class="metric-name">✅ Sent (API Accepted)</div>
+            <div class="metric-bar-wrap"><div class="progress-wrap"><div class="progress-bar" id="bar-sent" style="width:0%;background:var(--green)"></div></div></div>
+            <div class="metric-val stat-green" id="lbl-sent">0</div>
+          </div>
+          <div class="metric-row">
+            <div class="metric-name">⏳ Processing</div>
+            <div class="metric-bar-wrap"><div class="progress-wrap"><div class="progress-bar" id="bar-proc" style="width:0%;background:var(--blue)"></div></div></div>
+            <div class="metric-val" style="color:var(--blue)" id="lbl-proc">0</div>
+          </div>
+          <div class="metric-row">
+            <div class="metric-name">🚫 Suppressed</div>
+            <div class="metric-bar-wrap"><div class="progress-wrap"><div class="progress-bar" id="bar-supp" style="width:0%;background:#888"></div></div></div>
+            <div class="metric-val" style="color:#888" id="lbl-supp">0</div>
+          </div>
+          <div class="metric-row">
+            <div class="metric-name">❌ Failed</div>
+            <div class="metric-bar-wrap"><div class="progress-wrap"><div class="progress-bar" id="bar-fail" style="width:0%;background:var(--red)"></div></div></div>
+            <div class="metric-val stat-red" id="lbl-fail">0</div>
+          </div>
+          <div class="metric-row">
+            <div class="metric-name">🔁 Duplicates Skipped</div>
+            <div class="metric-bar-wrap"><div class="progress-wrap"><div class="progress-bar" id="bar-dup" style="width:0%;background:var(--yellow)"></div></div></div>
+            <div class="metric-val stat-yellow" id="lbl-dup">0</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CAMPAIGNS PANEL -->
+    <div class="panel" id="panel-campaigns">
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title">All Campaigns</span>
+          <button class="topbar-btn" style="font-size:12px;padding:5px 12px;" onclick="showPanel('upload',document.querySelectorAll('.nav-item')[2])">+ Upload</button>
+        </div>
+        <table class="table">
+          <thead><tr>
+            <th>Campaign Name</th><th>Template</th><th>Recipients</th><th>Sent</th><th>Failed</th><th>Status</th><th>Launched</th>
+          </tr></thead>
+          <tbody id="campaignsTbody">
+            <tr><td colspan="7" style="color:var(--muted);text-align:center;padding:32px;">No campaigns yet.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- UPLOAD PANEL -->
+    <div class="panel" id="panel-upload">
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title">🚀 Launch New Campaign</span>
+          <span style="font-size:11px;color:var(--muted);">Sends to your n8n webhook → WhatsApp API</span>
+        </div>
+        <div class="upload-area">
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Campaign Name *</label>
+              <input class="form-input" id="f-name" placeholder="e.g. Summer Sale 2026" type="text"/>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Message Template *</label>
+              <select class="form-input" id="f-template">
+                <option value="">— Select template —</option>
+                <option value="professional_promo">Professional Promo (with Shop Now CTA)</option>
+                <option value="image_message">Image Message</option>
+                <option value="text_only">Text Only</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">n8n Webhook URL *</label>
+              <input class="form-input" id="f-webhook" placeholder="https://your-n8n.io/webhook/campaign-studio-campaign-upload" type="url"/>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Basic Auth Password *</label>
+              <input class="form-input" id="f-auth" placeholder="Your n8n basic auth password" type="password"/>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Promo Message Body</label>
+              <textarea class="form-input" id="f-message" rows="3" placeholder="Hi {{name}}, check out our latest offer!..." style="resize:vertical;"></textarea>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Image URL (for image campaigns)</label>
+              <input class="form-input" id="f-image" placeholder="https://cdn.example.com/promo.jpg" type="url"/>
+            </div>
+          </div>
+          <div class="form-group" style="margin-bottom:14px;">
+            <label class="form-label">Recipient Phone Numbers (one per line, with country code)</label>
+            <textarea class="form-input" id="f-recipients" rows="5" placeholder="+911234567890&#10;+919876543210&#10;+447911123456" style="resize:vertical;font-family:monospace;font-size:12px;"></textarea>
+          </div>
+          <div class="form-group" style="margin-bottom:14px;">
+            <label class="form-label">Service Window Check</label>
+            <select class="form-input" id="f-window">
+              <option value="yes">Yes — enforce service window (template required outside window)</option>
+              <option value="no">No — send regardless of service window</option>
+            </select>
+          </div>
+
+          <div class="submit-row">
+            <button class="topbar-btn-ghost" onclick="clearForm()">Clear</button>
+            <button class="topbar-btn" onclick="launchCampaign()">🚀 Launch Campaign</button>
+          </div>
+
+          <!-- Progress -->
+          <div id="launchProgress" style="display:none;margin-top:20px;">
+            <div style="display:flex;justify-content:space-between;margin-bottom:6px;">
+              <span style="font-size:13px;" id="progressLabel">Sending...</span>
+              <span style="font-size:13px;color:var(--accent-light);" id="progressPct">0%</span>
+            </div>
+            <div class="progress-wrap" style="height:8px;"><div class="progress-bar" id="launchBar" style="width:0%;"></div></div>
+            <div id="progressLog" style="margin-top:14px;background:#0d0d0d;border:1px solid var(--border);border-radius:8px;padding:12px;font-size:12px;font-family:monospace;max-height:180px;overflow-y:auto;color:#888;"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- RECIPIENTS PANEL -->
+    <div class="panel" id="panel-recipients">
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title">Recipients (Google Sheets: Recipients)</span>
+          <span style="font-size:11px;color:var(--muted);">Managed in: Whatsapp Advertise → Recipients tab</span>
+        </div>
+        <div style="padding:24px;text-align:center;color:var(--muted);font-size:13px;">
+          <div style="font-size:32px;margin-bottom:12px;">📋</div>
+          <div>Recipients are managed in your Google Sheet.</div>
+          <div style="margin-top:6px;">
+            <a href="https://docs.google.com/spreadsheets/d/1sHrXBfYqARCuvbQXB2VPiq7Sjw26_sfmIxrIhQ_bY6I/edit#gid=0" target="_blank" style="color:var(--accent-light);font-size:13px;">Open Recipients Sheet →</a>
+          </div>
+          <div style="margin-top:18px;background:#1a1a1a;border-radius:10px;padding:16px;text-align:left;max-width:500px;margin-left:auto;margin-right:auto;">
+            <div style="font-size:12px;color:#888;margin-bottom:10px;font-weight:600;">Workflow checks (in order):</div>
+            <div style="font-size:12px;color:#aaa;display:flex;flex-direction:column;gap:6px;">
+              <span>1. ✅ <b style="color:var(--text);">Recipient Lookup</b> — checks if phone is in Recipients sheet</span>
+              <span>2. 🚫 <b style="color:var(--text);">Authorization Check</b> — blocks if recipient is not authorized</span>
+              <span>3. 🔕 <b style="color:var(--text);">Suppression Check</b> — skips if on Suppression_List</span>
+              <span>4. 🔁 <b style="color:var(--text);">Duplicate Check</b> — skips if already sent (idempotency key)</span>
+              <span>5. 📤 <b style="color:var(--text);">Send</b> — uploads image & sends via WhatsApp API</span>
+              <span>6. 📝 <b style="color:var(--text);">Log</b> — updates status in Message_Log sheet</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SUPPRESSION PANEL -->
+    <div class="panel" id="panel-suppression">
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title">Suppression List</span>
+          <span style="font-size:11px;color:var(--muted);">Google Sheet: Suppression_List tab</span>
+        </div>
+        <div style="padding:24px;">
+          <div style="background:#ef444408;border:1px solid #ef444422;border-radius:10px;padding:16px;margin-bottom:20px;font-size:13px;color:#fca5a5;">
+            ⚠️ Numbers on the suppression list will be <b>silently skipped</b> by the n8n workflow. No message will be sent, and the response will be <code>SUPPRESSED</code>.
+          </div>
+          <div style="text-align:center;color:var(--muted);">
+            <a href="https://docs.google.com/spreadsheets/d/1sHrXBfYqARCuvbQXB2VPiq7Sjw26_sfmIxrIhQ_bY6I/edit#gid=291490238" target="_blank" style="color:var(--accent-light);font-size:13px;">Open Suppression_List Sheet →</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- LOGS PANEL -->
+    <div class="panel" id="panel-logs">
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title">Message Logs (Message_Log)</span>
+          <a href="https://docs.google.com/spreadsheets/d/1sHrXBfYqARCuvbQXB2VPiq7Sjw26_sfmIxrIhQ_bY6I/edit#gid=1933418012" target="_blank" class="card-action">Open in Sheets →</a>
+        </div>
+        <table class="table">
+          <thead><tr>
+            <th>Phone</th><th>Campaign</th><th>Template</th><th>Status</th><th>Idempotency Key</th><th>Time</th>
+          </tr></thead>
+          <tbody id="logsTbody">
+            <tr><td colspan="6" style="color:var(--muted);text-align:center;padding:32px;">No messages logged yet.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div><!-- /content -->
+</div><!-- /main -->
+
+<!-- Toast -->
+<div class="toast" id="toast">
+  <div class="toast-icon success" id="toastIcon">✓</div>
+  <span id="toastMsg">Done!</span>
+</div>
+
+<script>
+// Keep these values in sync with zingo_login.html. Never use a service_role key in the browser.
+const SUPABASE_CONFIG={url:'https://qtsktzhqcsapbegbrnpm.supabase.co',anonKey:'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InF0c2t0emhxY3NhcGJlZ2JybnBtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODk3MjQ5ODUsImV4cCI6MjEwNTMwMDk4NX0.YvVd8quGuFZXeiIz-0j-DVPf8d-ft6X2cWQO6HXWHJk'};
+const supabaseClient=(!SUPABASE_CONFIG.url.includes('YOUR-PROJECT')&&!SUPABASE_CONFIG.anonKey.includes('YOUR_SUPABASE'))
+  ? window.supabase.createClient(SUPABASE_CONFIG.url,SUPABASE_CONFIG.anonKey) : null;
+(async function protectApp(){
+  if(!supabaseClient){document.body.innerHTML='<div style="display:grid;place-items:center;height:100vh;background:#0a0a0a;color:#e5e5e5;font:14px system-ui;padding:24px;text-align:center">Configure your Supabase URL and anon key in this file and zingo_login.html.<br><br><a style="color:#a78bfa" href="zingo_login.html">Back to sign in</a></div>';return;}
+  const {data:{session}}=await supabaseClient.auth.getSession();
+  if(!session){window.location.replace('zingo_login.html');return;}
+  const user=session.user, name=user.user_metadata?.full_name||user.email?.split('@')[0]||'User';
+  const initials=name.split(/\s+/).map(x=>x[0]).join('').slice(0,2).toUpperCase();
+  document.getElementById('userName').textContent=name;document.getElementById('userAvatar').textContent=initials;
+  document.getElementById('userRole').textContent=user.email||'Authenticated';
+})();
+document.getElementById('signOut')?.addEventListener('click',async e=>{e.preventDefault();if(supabaseClient)await supabaseClient.auth.signOut();window.location.replace('zingo_login.html')});
+// ── State ───────────────────────────────────────────────
+const state = {
+  campaigns: [],
+  logs: [],
+  stats: { sent:0, queued:0, failed:0, suppressed:0, processing:0, duplicates:0 }
+};
+
+// ── Navigation ──────────────────────────────────────────
+function showPanel(id, el) {
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  document.getElementById('panel-'+id).classList.add('active');
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  if(el) el.classList.add('active');
+  const titles = {dashboard:'Dashboard',campaigns:'Campaigns',upload:'Upload Campaign',recipients:'Recipients',suppression:'Suppression List',logs:'Message Logs'};
+  document.getElementById('topbarTitle').textContent = titles[id]||id;
+}
+
+// ── Toast ────────────────────────────────────────────────
+function showToast(msg, type='success') {
+  const t=document.getElementById('toast');
+  const ic=document.getElementById('toastIcon');
+  document.getElementById('toastMsg').textContent=msg;
+  ic.className='toast-icon '+(type==='error'?'error':'success');
+  ic.textContent=type==='error'?'✕':'✓';
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),3500);
+}
+
+// ── Refresh stats UI ─────────────────────────────────────
+function refreshStats() {
+  const s = state.stats;
+  document.getElementById('st-sent').textContent = s.sent;
+  document.getElementById('st-queued').textContent = s.queued;
+  document.getElementById('st-failed').textContent = s.failed + s.suppressed;
+  const total = s.sent + s.failed + s.suppressed;
+  document.getElementById('st-rate').textContent = total ? Math.round(s.sent/total*100)+'%' : '—';
+
+  const mx = Math.max(s.sent, s.processing, s.suppressed, s.failed, s.duplicates, 1);
+  const set = (id,val)=>{ document.getElementById('bar-'+id).style.width=(val/mx*100)+'%'; document.getElementById('lbl-'+id).textContent=val; };
+  set('sent',s.sent); set('proc',s.processing); set('supp',s.suppressed); set('fail',s.failed); set('dup',s.duplicates);
+
+  // queue badge
+  document.getElementById('queueCount').textContent = s.queued;
+
+  showToast('Stats refreshed');
+}
+
+// ── Clear form ───────────────────────────────────────────
+function clearForm() {
+  ['f-name','f-template','f-webhook','f-auth','f-message','f-image','f-recipients'].forEach(id=>{
+    const el=document.getElementById(id);
+    if(el) el.value='';
+  });
+  document.getElementById('launchProgress').style.display='none';
+}
+
+// ── Launch Campaign ──────────────────────────────────────
+async function launchCampaign() {
+  const name     = document.getElementById('f-name').value.trim();
+  const template = document.getElementById('f-template').value;
+  const webhook  = document.getElementById('f-webhook').value.trim();
+  const auth     = document.getElementById('f-auth').value.trim();
+  const message  = document.getElementById('f-message').value.trim();
+  const imageUrl = document.getElementById('f-image').value.trim();
+  const rawRecip = document.getElementById('f-recipients').value.trim();
+
+  if(!name){showToast('Campaign name is required','error');return;}
+  if(!template){showToast('Select a message template','error');return;}
+  if(!webhook){showToast('n8n Webhook URL is required','error');return;}
+  if(!rawRecip){showToast('Add at least one recipient','error');return;}
+
+  const phones = rawRecip.split('\n').map(p=>p.trim()).filter(Boolean);
+  const progDiv = document.getElementById('launchProgress');
+  const progLog = document.getElementById('progressLog');
+  const bar     = document.getElementById('launchBar');
+  const pct     = document.getElementById('progressPct');
+  const lbl     = document.getElementById('progressLabel');
+
+  progDiv.style.display='block';
+  progLog.textContent='';
+  bar.style.width='0%';
+  pct.textContent='0%';
+  lbl.textContent=`Sending to ${phones.length} recipients...`;
+
+  // Add campaign to state
+  const campaign = { name, template, total:phones.length, sent:0, failed:0, time:new Date().toLocaleTimeString() };
+  state.campaigns.unshift(campaign);
+  state.stats.queued += phones.length;
+  renderCampaigns();
+
+  let successCount=0, failCount=0;
+
+  for(let i=0;i<phones.length;i++){
+    const phone = phones[i];
+    const idempKey = `${name.replace(/\s+/g,'_')}_${phone}_${Date.now()}`;
+    const payload = {
+      campaign_name: name,
+      template_id: template,
+      phone,
+      message,
+      image_url: imageUrl||undefined,
+      idempotency_key: idempKey,
+      service_window: document.getElementById('f-window').value
+    };
+
+    log(progLog, `[${i+1}/${phones.length}] Sending to ${phone}...`, '#888');
+
+    try {
+      const headers = { 'Content-Type':'application/json' };
+      if(auth) headers['Authorization'] = 'Basic ' + btoa('user:'+auth);
+
+      const res = await fetch(webhook, {
+        method:'POST',
+        headers,
+        body: JSON.stringify(payload),
+        signal: AbortSignal.timeout(15000)
+      });
+
+      const body = await res.text();
+
+      if(res.ok) {
+        successCount++;
+        campaign.sent++;
+        state.stats.sent++;
+        state.stats.queued--;
+        log(progLog, `  ✅ Accepted (${res.status})`, '#22c55e');
+        addLog(phone, name, template, 'API_ACCEPTED', idempKey);
+        addActivity(`Sent to <b>${phone}</b> via <b>${name}</b>`, 'var(--green)');
+      } else {
+        failCount++;
+        campaign.failed++;
+        state.stats.failed++;
+        state.stats.queued--;
+        log(progLog, `  ❌ Failed (${res.status}): ${body.substring(0,100)}`, '#ef4444');
+        addLog(phone, name, template, 'SEND_FAILED', idempKey);
+      }
+    } catch(e) {
+      failCount++;
+      campaign.failed++;
+      state.stats.failed++;
+      state.stats.queued--;
+      log(progLog, `  ⚠ Error: ${e.message}`, '#f59e0b');
+      addLog(phone, name, template, 'ERROR', idempKey);
+    }
+
+    const done = i+1;
+    const p = Math.round(done/phones.length*100);
+    bar.style.width=p+'%';
+    pct.textContent=p+'%';
+    renderCampaigns();
+    refreshStats();
+    await sleep(300); // small delay between sends
+  }
+
+  lbl.textContent=`Done! ✅ ${successCount} sent, ❌ ${failCount} failed`;
+  showToast(`Campaign "${name}" complete: ${successCount}/${phones.length} sent`);
+}
+
+function sleep(ms){return new Promise(r=>setTimeout(r,ms));}
+function log(el,msg,color='#aaa'){
+  const line=document.createElement('div');
+  line.style.color=color;
+  line.textContent=msg;
+  el.appendChild(line);
+  el.scrollTop=el.scrollHeight;
+}
+
+// ── Render helpers ───────────────────────────────────────
+function renderCampaigns() {
+  const tbody = document.getElementById('campaignsTbody');
+  const rTbody = document.getElementById('recentCampaignsTbody');
+  if(!state.campaigns.length){
+    tbody.innerHTML='<tr><td colspan="7" style="color:var(--muted);text-align:center;padding:32px;">No campaigns yet.</td></tr>';
+    rTbody.innerHTML='<tr><td colspan="3" style="color:var(--muted);text-align:center;padding:24px;">No campaigns yet.</td></tr>';
+    return;
+  }
+  tbody.innerHTML = state.campaigns.map(c=>`
+    <tr>
+      <td><b>${esc(c.name)}</b></td>
+      <td style="color:var(--muted)">${esc(c.template)}</td>
+      <td>${c.total}</td>
+      <td class="stat-green">${c.sent}</td>
+      <td class="stat-red">${c.failed}</td>
+      <td>${statusPill(c)}</td>
+      <td style="color:var(--muted)">${c.time}</td>
+    </tr>`).join('');
+  rTbody.innerHTML = state.campaigns.slice(0,5).map(c=>`
+    <tr>
+      <td><b>${esc(c.name)}</b></td>
+      <td class="stat-green">${c.sent}/${c.total}</td>
+      <td>${statusPill(c)}</td>
+    </tr>`).join('');
+}
+
+function statusPill(c){
+  if(c.sent===c.total) return '<span class="pill sent"><span class="dot"></span>Complete</span>';
+  if(c.failed>0&&c.sent+c.failed===c.total) return '<span class="pill failed"><span class="dot"></span>Failed</span>';
+  if(c.sent+c.failed<c.total) return '<span class="pill processing"><span class="dot"></span>Running</span>';
+  return '<span class="pill queued"><span class="dot"></span>Queued</span>';
+}
+
+function addLog(phone, campaign, template, status, key) {
+  state.logs.unshift({ phone, campaign, template, status, key, time: new Date().toLocaleTimeString() });
+  const tbody = document.getElementById('logsTbody');
+  tbody.innerHTML = state.logs.slice(0,50).map(l=>`
+    <tr>
+      <td style="font-family:monospace">${esc(l.phone)}</td>
+      <td>${esc(l.campaign)}</td>
+      <td style="color:var(--muted)">${esc(l.template)}</td>
+      <td>${logPill(l.status)}</td>
+      <td style="font-family:monospace;font-size:11px;color:var(--muted)">${esc(l.key.substring(0,24))}…</td>
+      <td style="color:var(--muted)">${l.time}</td>
+    </tr>`).join('');
+}
+
+function logPill(s){
+  const map={API_ACCEPTED:'sent',SEND_FAILED:'failed',ERROR:'failed',SUPPRESSED:'suppressed',DUPLICATE:'queued',PROCESSING:'processing'};
+  const labels={API_ACCEPTED:'Sent',SEND_FAILED:'Failed',ERROR:'Error',SUPPRESSED:'Suppressed',DUPLICATE:'Duplicate',PROCESSING:'Processing'};
+  const cls=map[s]||'queued';
+  return `<span class="pill ${cls}"><span class="dot"></span>${labels[s]||s}</span>`;
+}
+
+function addActivity(html, dotColor='var(--accent)') {
+  const feed = document.getElementById('activityFeed');
+  const now = new Date().toLocaleTimeString();
+  const item = document.createElement('div');
+  item.className = 'activity-item';
+  item.innerHTML = `<div class="activity-dot" style="background:${dotColor}"></div>
+    <div class="activity-body">
+      <div class="activity-text">${html}</div>
+      <div class="activity-time">${now}</div>
+    </div>`;
+  feed.insertBefore(item, feed.firstChild);
+  // Remove placeholder
+  const placeholder = feed.querySelector('[style*="var(--muted)"]');
+  if(placeholder && feed.children.length > 1) placeholder.closest('.activity-item')?.remove();
+}
+
+function esc(s){ const d=document.createElement('div');d.textContent=s||'';return d.innerHTML; }
+</script>
+</body>
+</html>
