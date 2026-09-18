@@ -13,7 +13,7 @@
   --green:#22c55e;--red:#ef4444;--yellow:#f59e0b;--blue:#3b82f6;
 }
 body{background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,sans-serif;display:flex;height:100vh;overflow:hidden;}
-​
+
 /* Sidebar */
 .sidebar{width:220px;min-width:220px;background:var(--sidebar);border-right:1px solid var(--border);display:flex;flex-direction:column;padding:0;}
 .sidebar-logo{display:flex;align-items:center;gap:10px;padding:18px 16px;border-bottom:1px solid var(--border);}
@@ -35,7 +35,7 @@ body{background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,san
 .user-info{flex:1;min-width:0;}
 .user-name{font-size:12px;font-weight:600;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .user-role{font-size:10px;color:var(--muted);}
-​
+
 /* Main */
 .main{flex:1;display:flex;flex-direction:column;overflow:hidden;}
 .topbar{background:var(--sidebar);border-bottom:1px solid var(--border);padding:0 24px;height:54px;display:flex;align-items:center;gap:16px;}
@@ -48,12 +48,12 @@ body{background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,san
 .topbar-btn:hover{background:#6d28d9;}
 .topbar-btn-ghost{background:transparent;color:var(--text);border:1px solid var(--border);border-radius:7px;padding:7px 14px;font-size:13px;cursor:pointer;transition:all .2s;}
 .topbar-btn-ghost:hover{border-color:#444;background:#ffffff08;}
-​
+
 /* Content */
 .content{flex:1;overflow-y:auto;padding:24px;}
 .content::-webkit-scrollbar{width:5px;}
 .content::-webkit-scrollbar-thumb{background:#2a2a2a;border-radius:3px;}
-​
+
 /* Stats row */
 .stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:24px;}
 .stat-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px 18px;}
@@ -66,18 +66,18 @@ body{background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,san
 .stat-green{color:var(--green);}
 .stat-yellow{color:var(--yellow);}
 .stat-red{color:var(--red);}
-​
+
 /* Two-col */
 .two-col{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:24px;}
 .full-col{margin-bottom:24px;}
-​
+
 /* Card */
 .card{background:var(--card);border:1px solid var(--border);border-radius:12px;overflow:hidden;}
 .card-header{padding:14px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px;}
 .card-title{font-size:13px;font-weight:600;flex:1;}
 .card-action{font-size:12px;color:var(--accent-light);cursor:pointer;}
 .card-action:hover{text-decoration:underline;}
-​
+
 /* Table */
 .table{width:100%;border-collapse:collapse;}
 .table th{font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);padding:10px 16px;text-align:left;font-weight:500;border-bottom:1px solid var(--border);}
@@ -91,7 +91,7 @@ body{background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,san
 .pill.processing{background:#3b82f618;color:var(--blue);}
 .pill.suppressed{background:#66666618;color:#888;}
 .dot{width:6px;height:6px;border-radius:50%;background:currentColor;}
-​
+
 /* Upload form */
 .upload-area{padding:20px 18px;}
 .form-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px;}
@@ -106,7 +106,7 @@ select.form-input option{background:#1a1a1a;}
 .file-drop p{color:var(--muted);font-size:13px;margin-top:6px;}
 .file-drop .file-icon{font-size:28px;}
 .submit-row{display:flex;justify-content:flex-end;gap:10px;margin-top:16px;}
-​
+
 /* Campaign builder + live WhatsApp review */
 .builder-grid{display:grid;grid-template-columns:minmax(0,1.08fr) minmax(330px,.92fr);gap:18px;align-items:start}
 .builder-form{display:flex;flex-direction:column;gap:15px}.builder-section{border:1px solid var(--border);background:#151515;border-radius:12px;padding:16px}.builder-section-title{font-size:12px;font-weight:700;color:var(--text);margin-bottom:12px;display:flex;align-items:center;gap:8px}.builder-section-title span{font-size:10px;color:var(--muted);font-weight:500;margin-left:auto}
@@ -124,11 +124,11 @@ select.form-input option{background:#1a1a1a;}
   .topbar{height:58px;padding:0 12px;gap:7px}.topbar-title{font-size:14px;line-height:1.15}.topbar .status-indicator{display:none}.topbar-btn-ghost,.topbar-btn{padding:7px 9px;font-size:11px}.topbar-btn{white-space:nowrap}
   .content{padding:14px}.stats-row{grid-template-columns:1fr 1fr;gap:9px}.stat-card{padding:13px}.stat-val{font-size:22px}.two-col{grid-template-columns:1fr}.form-row{grid-template-columns:1fr}.card-header{align-items:flex-start}.connection-note{max-width:45%;text-align:right;line-height:1.3}.builder-grid{grid-template-columns:1fr}.builder-section{padding:13px}.review-card{position:relative}.phone{width:min(100%,320px)}
 }
-​
+
 /* Progress bar */
 .progress-wrap{background:#1a1a1a;border-radius:999px;height:6px;overflow:hidden;margin-top:6px;}
 .progress-bar{height:100%;border-radius:999px;background:linear-gradient(90deg,var(--accent),#a78bfa);transition:width .5s;}
-​
+
 /* Metrics mini */
 .metrics-list{padding:0 18px;}
 .metric-row{display:flex;align-items:center;gap:10px;padding:12px 0;border-bottom:1px solid #ffffff06;}
@@ -136,7 +136,7 @@ select.form-input option{background:#1a1a1a;}
 .metric-name{flex:1;font-size:13px;}
 .metric-bar-wrap{width:120px;}
 .metric-val{font-size:13px;font-weight:600;min-width:40px;text-align:right;}
-​
+
 /* Activity feed */
 .activity-list{padding:0 18px;}
 .activity-item{display:flex;gap:12px;padding:11px 0;border-bottom:1px solid #ffffff06;}
@@ -146,32 +146,32 @@ select.form-input option{background:#1a1a1a;}
 .activity-text{font-size:13px;line-height:1.4;}
 .activity-text b{color:var(--text);}
 .activity-time{font-size:11px;color:var(--muted);margin-top:2px;}
-​
+
 /* Notification dot */
 .notif-dot{width:7px;height:7px;background:var(--red);border-radius:50%;flex-shrink:0;}
-​
+
 /* Tabs panel */
 .panel{display:none;}
 .panel.active{display:block;}
-​
+
 /* Status indicator */
 .status-indicator{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--green);}
 .status-indicator::before{content:'';width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 6px var(--green);}
-​
+
 /* Toast */
 .toast{position:fixed;bottom:24px;right:24px;background:#1a1a1a;border:1px solid var(--border);border-radius:10px;padding:14px 18px;font-size:13px;color:var(--text);display:flex;align-items:center;gap:10px;box-shadow:0 8px 32px #0006;z-index:999;transform:translateY(80px);opacity:0;transition:all .3s;}
 .toast.show{transform:translateY(0);opacity:1;}
 .toast-icon{width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;flex-shrink:0;}
 .toast-icon.success{background:#22c55e22;color:var(--green);}
 .toast-icon.error{background:#ef444422;color:var(--red);}
-​
+
 /* Responsive */
 @media(max-width:900px){
   .stats-row{grid-template-columns:1fr 1fr;}
   .two-col{grid-template-columns:1fr;}
   .form-row{grid-template-columns:1fr;}
 }
-​
+
 @media(max-width:720px){
   .main,.content,.card,.upload-area,.builder-grid,.builder-form,.builder-section{min-width:0;max-width:100%}
   .builder-form .form-row{grid-template-columns:1fr!important}
@@ -181,7 +181,7 @@ select.form-input option{background:#1a1a1a;}
 </style>
 </head>
 <body>
-​
+
 <!-- Sidebar -->
 <nav class="sidebar">
   <div class="sidebar-logo">
@@ -190,7 +190,7 @@ select.form-input option{background:#1a1a1a;}
     </div>
     <span class="logo-name">zingo</span>
   </div>
-​
+
   <div class="sidebar-section">
     <div class="sidebar-label">Main</div>
     <div class="nav-item active" onclick="showPanel('dashboard',this)">
@@ -219,9 +219,9 @@ select.form-input option{background:#1a1a1a;}
       Message Logs
     </div>
   </div>
-​
+
   <div class="sidebar-section" style="margin-top:auto;"></div>
-​
+
   <div class="sidebar-bottom">
     <div class="status-indicator" style="margin-bottom:10px;padding:0 4px;">n8n Webhook Active</div>
     <div class="user-row">
@@ -234,7 +234,7 @@ select.form-input option{background:#1a1a1a;}
     </div>
   </div>
 </nav>
-​
+
 <!-- Main -->
 <div class="main">
   <div class="topbar">
@@ -244,9 +244,9 @@ select.form-input option{background:#1a1a1a;}
     <button class="topbar-btn-ghost" onclick="configureN8n()">⚙ Connect</button><button class="topbar-btn-ghost" onclick="refreshStats()">↻ Refresh</button>
     <button class="topbar-btn" onclick="showPanel('upload',document.querySelector('.nav-item:nth-child(3)'))">+ New Campaign</button>
   </div>
-​
+
   <div class="content">
-​
+
     <!-- DASHBOARD PANEL -->
     <div class="panel active" id="panel-dashboard">
       <div class="stats-row">
@@ -271,7 +271,7 @@ select.form-input option{background:#1a1a1a;}
           <div class="stat-change up">↑ this week</div>
         </div>
       </div>
-​
+
       <div class="two-col">
         <!-- Recent campaigns -->
         <div class="card">
@@ -288,7 +288,7 @@ select.form-input option{background:#1a1a1a;}
             </tbody>
           </table>
         </div>
-​
+
         <!-- Activity feed -->
         <div class="card">
           <div class="card-header">
@@ -305,7 +305,7 @@ select.form-input option{background:#1a1a1a;}
           </div>
         </div>
       </div>
-​
+
       <!-- Delivery breakdown -->
       <div class="card full-col">
         <div class="card-header">
@@ -340,7 +340,7 @@ select.form-input option{background:#1a1a1a;}
         </div>
       </div>
     </div>
-​
+
     <!-- CAMPAIGNS PANEL -->
     <div class="panel" id="panel-campaigns">
       <div class="card">
@@ -358,7 +358,7 @@ select.form-input option{background:#1a1a1a;}
         </table>
       </div>
     </div>
-​
+
     <!-- UPLOAD PANEL -->
     <div class="panel" id="panel-upload">
       <div class="card">
@@ -403,7 +403,7 @@ select.form-input option{background:#1a1a1a;}
         </div>
       </div>
     </div>
-​
+
     <!-- RECIPIENTS PANEL -->
     <div class="panel" id="panel-recipients">
       <div class="card">
@@ -431,7 +431,7 @@ select.form-input option{background:#1a1a1a;}
         </div>
       </div>
     </div>
-​
+
     <!-- SUPPRESSION PANEL -->
     <div class="panel" id="panel-suppression">
       <div class="card">
@@ -449,7 +449,7 @@ select.form-input option{background:#1a1a1a;}
         </div>
       </div>
     </div>
-​
+
     <!-- LOGS PANEL -->
     <div class="panel" id="panel-logs">
       <div class="card">
@@ -467,16 +467,16 @@ select.form-input option{background:#1a1a1a;}
         </table>
       </div>
     </div>
-​
+
   </div><!-- /content -->
 </div><!-- /main -->
-​
+
 <!-- Toast -->
 <div class="toast" id="toast">
   <div class="toast-icon success" id="toastIcon">✓</div>
   <span id="toastMsg">Done!</span>
 </div>
-​
+
 <script>
 // Keep these values in sync with zingo_login.html. Never use a service_role key in the browser.
 const SUPABASE_CONFIG={url:'https://YOUR-PROJECT.supabase.co',anonKey:'YOUR_SUPABASE_ANON_KEY'};
@@ -500,7 +500,7 @@ const state = {
   logs: [],
   stats: { sent:0, queued:0, failed:0, suppressed:0, processing:0, duplicates:0 }
 };
-​
+
 // ── Navigation ──────────────────────────────────────────
 function showPanel(id, el) {
   document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
@@ -510,7 +510,7 @@ function showPanel(id, el) {
   const titles = {dashboard:'Dashboard',campaigns:'Campaigns',upload:'Upload Campaign',recipients:'Recipients',suppression:'Suppression List',logs:'Message Logs'};
   document.getElementById('topbarTitle').textContent = titles[id]||id;
 }
-​
+
 // ── Toast ────────────────────────────────────────────────
 function showToast(msg, type='success') {
   const t=document.getElementById('toast');
@@ -521,7 +521,7 @@ function showToast(msg, type='success') {
   t.classList.add('show');
   setTimeout(()=>t.classList.remove('show'),3500);
 }
-​
+
 // ── Refresh stats UI ─────────────────────────────────────
 function refreshStats() {
   const s = state.stats;
@@ -530,23 +530,23 @@ function refreshStats() {
   document.getElementById('st-failed').textContent = s.failed + s.suppressed;
   const total = s.sent + s.failed + s.suppressed;
   document.getElementById('st-rate').textContent = total ? Math.round(s.sent/total*100)+'%' : '—';
-​
+
   const mx = Math.max(s.sent, s.processing, s.suppressed, s.failed, s.duplicates, 1);
   const set = (id,val)=>{ document.getElementById('bar-'+id).style.width=(val/mx*100)+'%'; document.getElementById('lbl-'+id).textContent=val; };
   set('sent',s.sent); set('proc',s.processing); set('supp',s.suppressed); set('fail',s.failed); set('dup',s.duplicates);
-​
+
   // queue badge
   document.getElementById('queueCount').textContent = s.queued;
-​
+
   showToast('Stats refreshed');
 }
-​
+
 // ── Send options + n8n connection ───────────────────────
 const sendMode=document.getElementById('f-send-mode'),singleRecipientWrap=document.getElementById('singleRecipientWrap'),consentWrap=document.getElementById('consentWrap');
 sendMode?.addEventListener('change',()=>{const single=sendMode.value==='single';singleRecipientWrap.style.display=single?'block':'none';consentWrap.style.display=single?'flex':'none'});
 function configureN8n(){const current=localStorage.getItem('zingo_n8n_basic_auth_password')||'';const pass=window.prompt('Enter your n8n Basic Auth password once. It will be stored only in this browser.',current);if(pass!==null&&pass.trim()){localStorage.setItem('zingo_n8n_basic_auth_password',pass.trim());showToast('n8n connection saved in this browser')}}
 function n8nPassword(){return N8N_CONFIG.basicAuthPassword||localStorage.getItem('zingo_n8n_basic_auth_password')||''}
-​
+
 // ── Live WhatsApp review ─────────────────────────────────
 const previewFields=['f-name','f-headline','f-message','f-product','f-offer','f-price','f-url','f-cta','f-urgency','f-footer'];
 previewFields.forEach(id=>document.getElementById(id)?.addEventListener('input',renderPreview));
@@ -554,14 +554,14 @@ document.getElementById('f-image-file')?.addEventListener('change',e=>{const fil
 function val(id){return document.getElementById(id)?.value.trim()||''}
 function renderPreview(){const bubble=document.getElementById('waBubble');if(!bubble)return;const image=window.previewImage||'';const headline=val('f-headline')||'A new release, selected for you';const message=val('f-message')||'Your message will appear here.';const product=val('f-product')||'Featured offer';const offer=val('f-offer');const price=val('f-price');const url=val('f-url');const cta=val('f-cta')||'Explore now';const urgency=val('f-urgency');const footer=val('f-footer');bubble.innerHTML=`${image?`<img src="${image}" alt="Campaign preview">`:'<div class="wa-placeholder">Upload an image to preview your campaign creative.</div>'}<h4>${esc(headline)}</h4><div>Hello there,</div><div style="margin-top:5px">${esc(message).replace(/\n/g,'<br>')}</div><div class="wa-product">${esc(product)}</div>${offer?`<div class="wa-offer">🎁 ${esc(offer)}</div>`:''}${price?`<div class="wa-price">💳 Offer price: ${esc(price)}</div>`:''}${urgency?`<div style="margin-top:7px">${esc(urgency)}</div>`:''}${url?`<a class="wa-cta" href="${/^https?:\/\//i.test(url)?esc(url):'#'}" target="_blank" rel="noopener">${esc(cta)}</a>`:''}${footer?`<div style="margin-top:8px;font-size:9px;color:#718273;font-style:italic">${esc(footer)}</div>`:''}<div class="wa-time">9:41 ✓✓</div>`}
 renderPreview();
-​
+
 // ── Clear form ───────────────────────────────────────────
 function clearForm(){['f-name','f-headline','f-message','f-product','f-offer','f-price','f-url','f-recipients'].forEach(id=>{const el=document.getElementById(id);if(el)el.value=''});document.getElementById('f-headline').value='A new release, selected for you';document.getElementById('f-cta').value='Explore now';document.getElementById('f-urgency').value='Available for a limited time. Explore the details today.';document.getElementById('f-footer').value='Thank you for being part of our community.';document.getElementById('f-send-mode').value='sheet';singleRecipientWrap.style.display='none';consentWrap.style.display='none';document.getElementById('f-consent').checked=false;const file=document.getElementById('f-image-file');if(file)file.value='';window.previewImage='';document.getElementById('fileLabel').textContent='Upload a JPG or PNG';document.getElementById('fileMeta').textContent='The image will appear in the WhatsApp preview';document.getElementById('fileDrop').classList.remove('has-file');document.getElementById('launchProgress').style.display='none';renderPreview()}
-​
+
 // ── Launch Campaign through the attached n8n workflow ────
 function buildCaption(fields){const lines=[`✨ *${fields.headline}*`,'',`Hello there,`,'',fields.message,`*${fields.product}*`,fields.offer?`🎁 ${fields.offer}`:'',fields.price?`💳 *Offer price:* ${fields.price}`:'','',fields.urgency,fields.url?`👉 *${fields.cta}:* ${fields.url}`:'','',fields.footer?`_${fields.footer}_`:''].filter((line,index,arr)=>line!==''||(index>0&&arr[index-1]!==''));return lines.join('\n').slice(0,1024)}
 async function launchCampaign(){const image=document.getElementById('f-image-file').files[0];const mode=sendMode.value;const phone=val('f-recipients');const fields={campaign_name:val('f-name'),headline:val('f-headline'),message:val('f-message'),product:val('f-product'),offer:val('f-offer'),price:val('f-price'),url:val('f-url'),cta:val('f-cta')||'Explore now',urgency:val('f-urgency'),footer:val('f-footer')};if(!fields.campaign_name||!fields.headline||!fields.message||!fields.product){showToast('Complete the required campaign fields','error');return}if(!image){showToast('Upload a JPG or PNG campaign image','error');return}if(mode==='single'&&!phone){showToast('Enter a phone number for option C','error');return}if(mode==='single'&&!document.getElementById('f-consent').checked){showToast('Confirm consent for the one-off recipient','error');return}if(mode==='draft'){const drafts=JSON.parse(localStorage.getItem('zingo_campaign_drafts')||'[]');drafts.unshift({...fields,mode:'draft',saved_at:new Date().toISOString()});localStorage.setItem('zingo_campaign_drafts',JSON.stringify(drafts.slice(0,20)));showToast('Campaign saved as a draft');return}const password=n8nPassword();if(!password){configureN8n();if(!n8nPassword()){showToast('Add your n8n password with the Connect button','error');return}}const prog=document.getElementById('launchProgress'),logEl=document.getElementById('progressLog'),bar=document.getElementById('launchBar'),pct=document.getElementById('progressPct'),lbl=document.getElementById('progressLabel'),btn=document.getElementById('launchBtn');prog.style.display='block';logEl.textContent='';bar.style.width='15%';pct.textContent='15%';lbl.textContent=mode==='sheet'?'Preparing approved recipients from Google Sheet…':'Preparing one-off recipient…';btn.disabled=true;const campaignId=`${fields.campaign_name.toLowerCase().replace(/[^a-z0-9]+/g,'_').replace(/^_|_$/g,'').slice(0,50)}_${new Date().toISOString().slice(0,10)}`;const form=new FormData();form.append('image_file',image,image.name);form.append('campaign_name',fields.campaign_name);form.append('headline',fields.headline);form.append('message_text',fields.message);form.append('product_name',fields.product);form.append('offer_text',fields.offer);form.append('product_price',fields.price);form.append('product_url',fields.url);form.append('button_text',fields.cta);form.append('urgency_text',fields.urgency);form.append('footer_text',fields.footer);form.append('campaign_id',campaignId);form.append('recipient_mode',mode==='sheet'?'production':'single');form.append('max_recipients',mode==='sheet'?'1000':'1');if(mode==='single')form.append('recipient_phone',phone);const headers={Authorization:'Basic '+btoa(`${N8N_CONFIG.basicAuthUser}:${n8nPassword()}`)};try{log(logEl,'Sending campaign to n8n…','#aaa');const res=await fetch(N8N_CONFIG.webhookUrl,{method:'POST',headers,body:form,signal:AbortSignal.timeout(120000)});const body=await res.text();if(!res.ok)throw new Error(`${res.status}: ${body.slice(0,180)}`);bar.style.width='100%';pct.textContent='100%';lbl.textContent=mode==='sheet'?'Batch accepted · n8n is processing your approved sheet recipients':'One-off campaign accepted by n8n';log(logEl,'✓ n8n accepted the campaign and started its workflow.','#22c55e');state.campaigns.unshift({name:fields.campaign_name,template:mode==='sheet'?'Google Sheet batch':'One-off image campaign',total:mode==='sheet'?'Sheet recipients':1,sent:0,failed:0,time:new Date().toLocaleTimeString()});renderCampaigns();showToast('Campaign sent to n8n successfully')}catch(e){bar.style.width='100%';pct.textContent='Error';lbl.textContent='Campaign was not launched';log(logEl,`✕ ${e.message}`,'#ef4444');showToast(e.message,'error')}finally{btn.disabled=false}}
-​
+
 function sleep(ms){return new Promise(r=>setTimeout(r,ms));}
 function log(el,msg,color='#aaa'){
   const line=document.createElement('div');
@@ -570,7 +570,7 @@ function log(el,msg,color='#aaa'){
   el.appendChild(line);
   el.scrollTop=el.scrollHeight;
 }
-​
+
 // ── Render helpers ───────────────────────────────────────
 function renderCampaigns() {
   const tbody = document.getElementById('campaignsTbody');
@@ -597,14 +597,14 @@ function renderCampaigns() {
       <td>${statusPill(c)}</td>
     </tr>`).join('');
 }
-​
+
 function statusPill(c){
   if(c.sent===c.total) return '<span class="pill sent"><span class="dot"></span>Complete</span>';
   if(c.failed>0&&c.sent+c.failed===c.total) return '<span class="pill failed"><span class="dot"></span>Failed</span>';
   if(c.sent+c.failed<c.total) return '<span class="pill processing"><span class="dot"></span>Running</span>';
   return '<span class="pill queued"><span class="dot"></span>Queued</span>';
 }
-​
+
 function addLog(phone, campaign, template, status, key) {
   state.logs.unshift({ phone, campaign, template, status, key, time: new Date().toLocaleTimeString() });
   const tbody = document.getElementById('logsTbody');
@@ -618,14 +618,14 @@ function addLog(phone, campaign, template, status, key) {
       <td style="color:var(--muted)">${l.time}</td>
     </tr>`).join('');
 }
-​
+
 function logPill(s){
   const map={API_ACCEPTED:'sent',SEND_FAILED:'failed',ERROR:'failed',SUPPRESSED:'suppressed',DUPLICATE:'queued',PROCESSING:'processing'};
   const labels={API_ACCEPTED:'Sent',SEND_FAILED:'Failed',ERROR:'Error',SUPPRESSED:'Suppressed',DUPLICATE:'Duplicate',PROCESSING:'Processing'};
   const cls=map[s]||'queued';
   return `<span class="pill ${cls}"><span class="dot"></span>${labels[s]||s}</span>`;
 }
-​
+
 function addActivity(html, dotColor='var(--accent)') {
   const feed = document.getElementById('activityFeed');
   const now = new Date().toLocaleTimeString();
@@ -641,7 +641,7 @@ function addActivity(html, dotColor='var(--accent)') {
   const placeholder = feed.querySelector('[style*="var(--muted)"]');
   if(placeholder && feed.children.length > 1) placeholder.closest('.activity-item')?.remove();
 }
-​
+
 function esc(s){ const d=document.createElement('div');d.textContent=s||'';return d.innerHTML; }
 </script>
 </body>
